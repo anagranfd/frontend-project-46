@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "Compares two configuration files and shows a difference.",
-  "main": "./bin/gendiff.js",
+  "main": "./src/index.js",
   "bin": {
     "code": "bin/gendiff.js"
   },
@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/anagranfd/frontend-project-46#readme",
   "dependencies": {
-    "commander": "^10.0.1"
+    "commander": "^10.0.1",
+    "fs": "^0.0.1-security"
   },
   "devDependencies": {
     "eslint": "^8.38.0",
