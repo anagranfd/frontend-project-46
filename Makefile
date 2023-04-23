@@ -10,6 +10,12 @@ lint:
 fix:
 	npx eslint . --fix
 
+test:
+	npm test
+
+test-coverage:
+	npm test -- --coverage --coverageProvider=v8
+
 jsondiff:
 	node bin/gendiff.js /home/anagran/frontend-project-46/__fixtures__/file1.json /home/anagran/frontend-project-46/__fixtures__/file2.json
 

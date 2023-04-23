@@ -44,7 +44,7 @@ const gendiff = (filepath1, filepath2) => {
         // if parsedFileData1 contents key, but the value is the same
         // as parsedFileData2 value (without updates)
         if (parsedFileData1[key2] && parsedFileData1[key2] === value2) {
-          return [...accDiff, `  ${key2}: ${parsedFileData1[key2]}`];
+          return [...accDiff, `    ${key2}: ${parsedFileData1[key2]}`];
         }
 
         // if parsedFileData1 doesn't content key, but parsedFileData2 does (added)
