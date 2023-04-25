@@ -16,8 +16,11 @@ test:
 test-coverage:
 	npm test -- --coverage --coverageProvider=v8
 
-jsondiff:
+json:
 	node bin/gendiff.js /home/anagran/frontend-project-46/__fixtures__/file1.json /home/anagran/frontend-project-46/__fixtures__/file2.json
+
+yaml:
+	node bin/gendiff.js /home/anagran/frontend-project-46/__fixtures__/file1.yml /home/anagran/frontend-project-46/__fixtures__/file2.yml
 
 help:
 	node bin/gendiff.js -h
