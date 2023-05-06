@@ -29,7 +29,7 @@ const gendiff = (filepath1, filepath2) => {
   const [parsedFileData1, parsedFileData2] = parser(
     fullPath1,
     fileData1,
-    fileData2
+    fileData2,
   );
 
   // Create filesDifference obj: Compare key: value of fileData1, parsedFileData2

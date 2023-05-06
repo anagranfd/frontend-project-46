@@ -17,8 +17,7 @@ const filesDiff = (d1, d2) => {
       return `${data}`;
     }
     const lines = Object.entries(data).map(
-      ([key, value]) =>
-        `${getBiggerSpaces(depth + 1)}${key}: ${stringify(value, depth + 1)}`
+      ([key, value]) => `${getBiggerSpaces(depth + 1)}${key}: ${stringify(value, depth + 1)}`,
     );
     return `{\n${lines.join('\n')}\n${getBiggerSpaces(depth)}}`;
   };
@@ -31,14 +30,14 @@ const filesDiff = (d1, d2) => {
       if (typeof value1 === 'object' && typeof value2 === 'object') {
         const getObj = iter(value1, value2, depth + 2);
         return `${getBiggerSpaces(depth)}${key2}: {\n${getObj.join(
-          '\n'
+          '\n',
         )}\n${getBiggerSpaces(depth)}}`;
       }
 
       // added
       if (
-        !Object.values(data1).includes(value1) &&
-        Object.values(data2).includes(value2)
+        !Object.values(data1).includes(value1)
+        && Object.values(data2).includes(value2)
       ) {
         return `${getSpaces(depth)}+ ${key2}: ${stringify(value2, depth)}`;
       }
@@ -47,7 +46,7 @@ const filesDiff = (d1, d2) => {
       if (typeof value1 === 'object' && typeof value2 !== 'object' && value2) {
         return `${getSpaces(depth)}- ${key2}: ${stringify(
           value1,
-          depth
+          depth,
         )}\n${getSpaces(depth)}+ ${key2}: ${stringify(value2, depth)}`;
       }
 
@@ -55,7 +54,7 @@ const filesDiff = (d1, d2) => {
       if (typeof value1 !== 'object' && typeof value2 === 'object' && value2) {
         return `${getSpaces(depth)}- ${key2}: ${stringify(
           value1,
-          depth
+          depth,
         )}\n${getSpaces(depth)}+ ${key2}: ${stringify(value2, depth)}`;
       }
 
@@ -63,7 +62,7 @@ const filesDiff = (d1, d2) => {
       if ((value1 || value1 === '') && value1 !== value2) {
         return `${getSpaces(depth)}- ${key2}: ${stringify(
           value1,
-          depth
+          depth,
         )}\n${getSpaces(depth)}+ ${key2}: ${stringify(value2, depth)}`;
       }
 
