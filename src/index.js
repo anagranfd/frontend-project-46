@@ -4,7 +4,7 @@ import path from 'path';
 import { readFileSync } from 'fs';
 
 import parser from './parsers/parser.js';
-import filesDiff from './parsers/filesDiff.js';
+import stylish from './parsers/stylish.js';
 
 // Create a full path from root path and filepath
 const getFullPath = (filepath) => path.resolve(cwd(), filepath);
@@ -33,7 +33,7 @@ const gendiff = (filepath1, filepath2) => {
   );
 
   // Create filesDifference obj: Compare key: value of fileData1, parsedFileData2
-  const result = filesDiff(parsedFileData1, parsedFileData2);
+  const result = stylish(parsedFileData1, parsedFileData2);
 
   return result;
   // -----------------------------------
