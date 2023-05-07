@@ -11,8 +11,9 @@ program
   .arguments('<filepath1> <filepath2>')
   .option('-f, --format <type>', 'output format', 'stylish')
   .action((filepath1, filepath2) => {
-    const option = program.opts();
-    console.log(gendiff(filepath1, filepath2, option.format));
+    const options = program.opts();
+    if (options.format === 'stylish') console.log(gendiff(filepath1, filepath2, options.format));
+    if (options.format === 'plain') console.log(gendiff(filepath1, filepath2, options.format));
   });
 
 program.parse();

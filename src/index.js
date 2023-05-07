@@ -4,13 +4,15 @@ import path from 'path';
 import { readFileSync } from 'fs';
 
 import parser from './parsers/parser.js';
-import stylish from './parsers/stylish.js';
+// import stylish from './formatters/stylish.js';
+// import plain from './formatters/plain.js';
+import formatter from './formatters/index.js';
 
 // Create a full path from root path and filepath
 const getFullPath = (filepath) => path.resolve(cwd(), filepath);
 
 // Generate diff string from two passed objects
-const gendiff = (filepath1, filepath2) => {
+const gendiff = (filepath1, filepath2, formatName = 'stylish') => {
   // Create a full path from root path and filepath1
   const fullPath1 = getFullPath(filepath1);
 
@@ -33,7 +35,7 @@ const gendiff = (filepath1, filepath2) => {
   );
 
   // Create filesDifference obj: Compare key: value of fileData1, parsedFileData2
-  const result = stylish(parsedFileData1, parsedFileData2);
+  const result = formatter(parsedFileData1, parsedFileData2, formatName);
 
   return result;
   // -----------------------------------
