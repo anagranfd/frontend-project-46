@@ -10,23 +10,21 @@ const dirname = path.resolve();
 const outputFilePath = path.join(dirname, '__fixtures__', 'filesDiff.txt');
 const outputFile = readFileSync(outputFilePath, 'utf8');
 
-test('json', () => {
-  const file1Path = path.join(dirname, '__fixtures__', 'file1.json');
-  const file2Path = path.join(dirname, '__fixtures__', 'file2.json');
+const outputFilePathPlain = path.join(dirname, '__fixtures__', 'plainDiff.txt');
+const outputFilePlain = readFileSync(outputFilePathPlain, 'utf8');
 
-  expect(gendiff(file1Path, file2Path)).toEqual(outputFile);
-});
+const outputFilePathJson = path.join(dirname, '__fixtures__', 'jsonDiff.txt');
+const outputFileJson = readFileSync(outputFilePathJson, 'utf8');
 
-test('yml', () => {
-  const file1Path = path.join(dirname, '__fixtures__', 'file1.yml');
-  const file2Path = path.join(dirname, '__fixtures__', 'file2.yml');
+const file1Path = path.join(dirname, '__fixtures__', 'file1.json');
+const file2Path = path.join(dirname, '__fixtures__', 'file2.json');
+const file3Path = path.join(dirname, '__fixtures__', 'file1.yaml');
+const file4Path = path.join(dirname, '__fixtures__', 'file2.yaml');
 
-  expect(gendiff(file1Path, file2Path)).toEqual(outputFile);
-});
-
-test('yaml', () => {
-  const file1Path = path.join(dirname, '__fixtures__', 'file1.yaml');
-  const file2Path = path.join(dirname, '__fixtures__', 'file2.yaml');
-
-  expect(gendiff(file1Path, file2Path)).toEqual(outputFile);
+describe('filesDiff', () => {
+  test('formats', () => {
+    expect(gendiff(file1Path, file2Path)).toEqual(outputFile);
+    expect(gendiff(file3Path, file4Path, 'plain')).toEqual(outputFilePlain);
+    expect(gendiff(file3Path, file4Path, 'json')).toEqual(outputFileJson);
+  });
 });
