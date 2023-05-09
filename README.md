@@ -12,3 +12,4 @@
 [![asciicast]](https://asciinema.org/a/rHlTgDlnBLgbbbBWgGcWt6TE7)
 [![asciicast]](https://asciinema.org/a/u6U9Huf5LFKhBvvn0NxJwAyEH)
 [![asciicast]](https://asciinema.org/a/nAmc4MzdK47iFpXfAVetI8ZNf)
+[![asciicast]](https://asciinema.org/a/45A2pigk2wMlhE3bGuMRNvCLw)

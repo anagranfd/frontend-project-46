@@ -14,6 +14,7 @@ program
     const options = program.opts();
     if (options.format === 'stylish') console.log(gendiff(filepath1, filepath2, options.format));
     if (options.format === 'plain') console.log(gendiff(filepath1, filepath2, options.format));
+    if (options.format === 'json') console.log(gendiff(filepath1, filepath2, options.format));
   });
 
 program.parse();

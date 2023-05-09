@@ -17,10 +17,7 @@ test-coverage:
 	npm test -- --coverage --coverageProvider=v8
 
 json:
-	node bin/gendiff.js /home/anagran/frontend-project-46/__fixtures__/file1.json /home/anagran/frontend-project-46/__fixtures__/file2.json
-
-yaml:
-	node bin/gendiff.js /home/anagran/frontend-project-46/__fixtures__/file1.yml /home/anagran/frontend-project-46/__fixtures__/file2.yml
+	node bin/gendiff.js --format json /home/anagran/frontend-project-46/__fixtures__/file1.json /home/anagran/frontend-project-46/__fixtures__/file2.json
 
 s-json:
 	node bin/gendiff.js --format stylish /home/anagran/frontend-project-46/__fixtures__/file1.json /home/anagran/frontend-project-46/__fixtures__/file2.json
