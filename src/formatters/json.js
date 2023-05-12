@@ -14,12 +14,12 @@ const diffToJson = (diff) => {
 
   const stringify = (data, depth) => {
     if (typeof data !== 'object' || data === null) {
-      return `${typeof data === 'string' ? `"${data}"` : data}`;
+      return `${typeof data === 'string' ? `"${data}"` : `${data}`}`;
     }
     const lines = Object.entries(data).map(
       ([key, value]) => `${getBiggerSpaces(depth + 1)}"${key}": ${stringify(value, depth + 1)}`,
     );
-    return `{\n${lines.join('\n')}\n${getBiggerSpaces(depth)}}`;
+    return `{\n${lines.join(',\n')}\n${getBiggerSpaces(depth)}}`;
   };
 
   const iter = (diffTree, depth = 1) => diffTree.map((item) => {
@@ -35,7 +35,7 @@ const diffToJson = (diff) => {
       case 'changed': {
         return `${getSpaces(depth)}"${item.key}": {\n${getBiggerSpaces(
           depth,
-        )}"-": ${stringify(item.value1, depth)}\n${getBiggerSpaces(
+        )}"-": ${stringify(item.value1, depth)},\n${getBiggerSpaces(
           depth,
         )}"+": ${stringify(item.value2, depth)}\n${getSpaces(depth)}}`;
       }
@@ -47,7 +47,7 @@ const diffToJson = (diff) => {
       case 'nested': {
         const getObj = iter(item.children, depth + 2);
         return `${getSpaces(depth)}"${item.key}": {\n${getObj.join(
-          '\n',
+          ',\n',
         )}\n${getBiggerSpaces(depth)}}`;
       }
       default:
@@ -57,7 +57,7 @@ const diffToJson = (diff) => {
 
   const str = iter(diff, 1);
 
-  return `{\n${str.join('\n')}\n}`;
+  return `{\n${str.join(',\n')}\n}`;
 };
 
 export default diffToJson;
