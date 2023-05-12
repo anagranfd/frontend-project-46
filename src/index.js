@@ -26,8 +26,8 @@ const gendiff = (filepath1, filepath2, formatName = 'stylish') => {
   // Get file2 data, read it as a string
   const fileData2 = readFileSync(fullPath2, 'utf8');
 
-  const formatFile1 = path.extname(fullPath1);
-  const formatFile2 = path.extname(fullPath2);
+  const formatFile1 = path.extname(fullPath1).substring(1);
+  const formatFile2 = path.extname(fullPath2).substring(1);
 
   // ------------------------------------
   // Create a file3 with file1 & file 2 diff
