@@ -1,14 +1,14 @@
-const diffToJson = (d1, d2) => {
-  const spacesCount = 2;
+const diffToJson = (diff) => {
+  const spacesCount = 4;
   const replacer = ' ';
 
   const getSpaces = (depth) => {
-    const indentSize = depth * spacesCount;
+    const indentSize = depth + spacesCount;
     return replacer.repeat(indentSize - 2);
   };
 
   const getBiggerSpaces = (depth) => {
-    const indentSize = depth * spacesCount;
+    const indentSize = depth + spacesCount;
     return replacer.repeat(indentSize);
   };
 
@@ -22,74 +22,40 @@ const diffToJson = (d1, d2) => {
     return `{\n${lines.join('\n')}\n${getBiggerSpaces(depth)}}`;
   };
 
-  const iter = (data1, data2, depth = 1) => {
-    const filesDifference = Object.entries(data2).map(([key2, value2]) => {
-      const value1 = data1[key2];
-
-      // nested
-      if (typeof value1 === 'object' && typeof value2 === 'object') {
-        const getObj = iter(value1, value2, depth + 2);
-        return `${getBiggerSpaces(depth)}"${key2}": {\n${getObj.join(
+  const iter = (diffTree, depth = 1) => diffTree.map((item) => {
+    switch (item.type) {
+      case 'removed':
+        return `${getSpaces(depth)}"${item.key}": {\n${getBiggerSpaces(
+          depth,
+        )}"-": ${stringify(item.value, depth)}\n${getSpaces(depth)}}`;
+      case 'added':
+        return `${getSpaces(depth)}"${item.key}": {\n${getBiggerSpaces(
+          depth,
+        )}"+": ${stringify(item.value, depth)}\n${getSpaces(depth)}}`;
+      case 'changed': {
+        return `${getSpaces(depth)}"${item.key}": {\n${getBiggerSpaces(
+          depth,
+        )}"-": ${stringify(item.value1, depth)}\n${getBiggerSpaces(
+          depth,
+        )}"+": ${stringify(item.value2, depth)}\n${getSpaces(depth)}}`;
+      }
+      case 'unchanged':
+        return `${getSpaces(depth)}"${item.key}": ${stringify(
+          item.value,
+          depth,
+        )}`;
+      case 'nested': {
+        const getObj = iter(item.children, depth + 2);
+        return `${getSpaces(depth)}"${item.key}": {\n${getObj.join(
           '\n',
         )}\n${getBiggerSpaces(depth)}}`;
       }
+      default:
+        throw new Error(`Wrong item type: '${item.type}'.`);
+    }
+  });
 
-      // added
-      if (
-        !Object.values(data1).includes(value1)
-        && Object.values(data2).includes(value2)
-      ) {
-        return `${getSpaces(depth)}"${key2}": {\n${getBiggerSpaces(
-          depth,
-        )}"+": ${stringify(value2, depth)}\n${getSpaces(depth)}}`;
-      }
-
-      // updated with str (was obj)
-      if (typeof value1 === 'object' && typeof value2 !== 'object' && value2) {
-        return `${getSpaces(depth)}"${key2}": {\n${getBiggerSpaces(
-          depth,
-        )}"-": ${stringify(value1, depth)}\n${getBiggerSpaces(
-          depth,
-        )}"+": ${stringify(value2, depth)}\n${getSpaces(depth)}}`;
-      }
-
-      // updated with obj
-      if (typeof value1 !== 'object' && typeof value2 === 'object' && value2) {
-        return `${getSpaces(depth)}"${key2}": {\n${getBiggerSpaces(
-          depth,
-        )}"-": ${stringify(value1, depth)}\n${getBiggerSpaces(
-          depth,
-        )}"+": ${stringify(value2, depth)}\n${getSpaces(depth)}}`;
-      }
-
-      // updated
-      if ((value1 || value1 === '') && value1 !== value2) {
-        return `${getSpaces(depth)}"${key2}": {\n${getBiggerSpaces(
-          depth,
-        )}"-": ${stringify(value1, depth)}\n${getBiggerSpaces(
-          depth,
-        )}"+": ${stringify(value2, depth)}\n${getSpaces(depth)}}`;
-      }
-
-      // without updates
-      return `${getSpaces(depth)}"${key2}": ${stringify(value1, depth)}`;
-    });
-
-    // removed
-    const removedData = Object.entries(data1)
-      .filter(([key1]) => !Object.keys(data2).includes(key1))
-      .map(([key1, value1]) => [
-        `${getSpaces(depth)}"${key1}": {\n${getBiggerSpaces(
-          depth,
-        )}"-": ${stringify(value1, depth)}\n${getSpaces(depth)}}`,
-      ]);
-
-    const result = [...filesDifference, ...removedData];
-
-    return result;
-  };
-
-  const str = iter(d1, d2, 2);
+  const str = iter(diff, 1);
 
   return `{\n${str.join('\n')}\n}`;
 };

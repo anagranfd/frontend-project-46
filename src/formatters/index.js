@@ -2,16 +2,18 @@ import stylish from './stylish.js';
 import plain from './plain.js';
 import json from './json.js';
 
-const formatter = (data1, data2, formatName) => {
+const formatter = (diff, formatName) => {
   switch (formatName) {
     case 'plain':
-      return plain(data1, data2);
+      return plain(diff);
     case 'stylish':
-      return stylish(data1, data2);
+      return stylish(diff);
     case 'json':
-      return json(data1, data2);
+      return json(diff);
     default:
-      return stylish(data1, data2);
+      throw new Error(
+        `${formatName} format is not supported.\nPlease choose one of formats: stylish, plain, json`,
+      );
   }
 };
 

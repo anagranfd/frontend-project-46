@@ -24,6 +24,7 @@ const file4Path = path.join(dirname, '__fixtures__', 'file2.yaml');
 describe('filesDiff', () => {
   test('formats', () => {
     expect(gendiff(file1Path, file2Path)).toEqual(outputFile);
+    expect(gendiff(file1Path, file2Path, 'stylish')).toEqual(outputFile);
     expect(gendiff(file3Path, file4Path, 'plain')).toEqual(outputFilePlain);
     expect(gendiff(file3Path, file4Path, 'json')).toEqual(outputFileJson);
   });

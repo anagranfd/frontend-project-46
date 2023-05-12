@@ -1,5 +1,5 @@
-const filesDiff = (d1, d2) => {
-  const spacesCount = 2;
+const filesDiff = (diff) => {
+  const spacesCount = 4;
   const replacer = ' ';
 
   const getSpaces = (depth) => {
@@ -22,67 +22,44 @@ const filesDiff = (d1, d2) => {
     return `{\n${lines.join('\n')}\n${getBiggerSpaces(depth)}}`;
   };
 
-  const iter = (data1, data2, depth = 1) => {
-    const filesDifference = Object.entries(data2).map(([key2, value2]) => {
-      const value1 = data1[key2];
-
-      // nested
-      if (typeof value1 === 'object' && typeof value2 === 'object') {
-        const getObj = iter(value1, value2, depth + 2);
-        return `${getBiggerSpaces(depth)}${key2}: {\n${getObj.join(
+  const iter = (diffTree, depth = 1) => diffTree.map((item) => {
+    switch (item.type) {
+      case 'removed':
+        return `${getSpaces(depth)}- ${item.key}: ${stringify(
+          item.value,
+          depth,
+        )}`;
+      case 'added':
+        return `${getSpaces(depth)}+ ${item.key}: ${stringify(
+          item.value,
+          depth,
+        )}`;
+      case 'changed': {
+        return `${getSpaces(depth)}- ${item.key}: ${stringify(
+          item.value1,
+          depth,
+        )}\n${getSpaces(depth)}+ ${item.key}: ${stringify(
+          item.value2,
+          depth,
+        )}`;
+      }
+      case 'unchanged':
+        return `${getBiggerSpaces(depth)}${item.key}: ${stringify(
+          item.value,
+          depth,
+        )}`;
+      case 'nested': {
+        const lines = iter(item.children, depth + 1);
+        return `${getBiggerSpaces(depth)}${item.key}: {\n${lines.join(
           '\n',
         )}\n${getBiggerSpaces(depth)}}`;
       }
+      default:
+        throw new Error(`Wrong item type: '${item.type}'.`);
+    }
+  });
 
-      // added
-      if (
-        !Object.values(data1).includes(value1)
-        && Object.values(data2).includes(value2)
-      ) {
-        return `${getSpaces(depth)}+ ${key2}: ${stringify(value2, depth)}`;
-      }
-
-      // updated with str (was obj)
-      if (typeof value1 === 'object' && typeof value2 !== 'object' && value2) {
-        return `${getSpaces(depth)}- ${key2}: ${stringify(
-          value1,
-          depth,
-        )}\n${getSpaces(depth)}+ ${key2}: ${stringify(value2, depth)}`;
-      }
-
-      // updated with obj
-      if (typeof value1 !== 'object' && typeof value2 === 'object' && value2) {
-        return `${getSpaces(depth)}- ${key2}: ${stringify(
-          value1,
-          depth,
-        )}\n${getSpaces(depth)}+ ${key2}: ${stringify(value2, depth)}`;
-      }
-
-      // updated
-      if ((value1 || value1 === '') && value1 !== value2) {
-        return `${getSpaces(depth)}- ${key2}: ${stringify(
-          value1,
-          depth,
-        )}\n${getSpaces(depth)}+ ${key2}: ${stringify(value2, depth)}`;
-      }
-
-      // without updates
-      return `${getBiggerSpaces(depth)}${key2}: ${stringify(value1, depth)}`;
-    });
-
-    // removed
-    const removedData = Object.entries(data1)
-      .filter(([key1]) => !Object.keys(data2).includes(key1))
-      .map(([key1, value1]) => [
-        `${getSpaces(depth)}- ${key1}: ${stringify(value1, depth)}`,
-      ]);
-
-    const result = [...filesDifference, ...removedData];
-
-    return result;
-  };
-
-  const str = iter(d1, d2, 2);
+  const str = iter(diff, 1);
 
   return `{\n${str.join('\n')}\n}`;
 };

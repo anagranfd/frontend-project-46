@@ -1,18 +1,18 @@
 const stringify = (data) => {
-  if (typeof data === 'object' && data !== null) {
+  if (typeof data === 'object' || data !== null) {
     return '[complex value]';
   }
   if (typeof data === 'string') {
     return `'${data}'`;
   }
-  return data;
+  return `${data}`;
 };
 
 const getFullPath = (node, currentPath) => {
   if (currentPath !== '') {
     return `${currentPath}.${node.key}`;
   }
-  return node.key;
+  return `${node.key}`;
 };
 
 const iter = (diff, path) => diff
