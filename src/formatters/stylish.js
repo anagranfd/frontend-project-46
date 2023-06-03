@@ -1,27 +1,27 @@
+const spacesCount = 4;
+const replacer = ' ';
+
+const getSpaces = (depth) => {
+  const indentSize = depth * spacesCount;
+  return replacer.repeat(indentSize - 2);
+};
+
+const getBiggerSpaces = (depth) => {
+  const indentSize = depth * spacesCount;
+  return replacer.repeat(indentSize);
+};
+
+const stringify = (data, depth) => {
+  if (typeof data !== 'object' || data === null) {
+    return `${data}`;
+  }
+  const lines = Object.entries(data).map(
+    ([key, value]) => `${getBiggerSpaces(depth + 1)}${key}: ${stringify(value, depth + 1)}`,
+  );
+  return `{\n${lines.join('\n')}\n${getBiggerSpaces(depth)}}`;
+};
+
 const filesDiff = (diff) => {
-  const spacesCount = 4;
-  const replacer = ' ';
-
-  const getSpaces = (depth) => {
-    const indentSize = depth * spacesCount;
-    return replacer.repeat(indentSize - 2);
-  };
-
-  const getBiggerSpaces = (depth) => {
-    const indentSize = depth * spacesCount;
-    return replacer.repeat(indentSize);
-  };
-
-  const stringify = (data, depth) => {
-    if (typeof data !== 'object' || data === null) {
-      return `${data}`;
-    }
-    const lines = Object.entries(data).map(
-      ([key, value]) => `${getBiggerSpaces(depth + 1)}${key}: ${stringify(value, depth + 1)}`,
-    );
-    return `{\n${lines.join('\n')}\n${getBiggerSpaces(depth)}}`;
-  };
-
   const iter = (diffTree, depth = 1) => diffTree.map((item) => {
     switch (item.type) {
       case 'removed':

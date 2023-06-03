@@ -33,7 +33,7 @@ const iter = (diff, path) => diff
       case 'nested':
         return iter(node.children, currentPath).join('\n');
       default:
-        return null;
+        throw new Error(`Wrong item type: '${node.type}'.`);
     }
   });
 
